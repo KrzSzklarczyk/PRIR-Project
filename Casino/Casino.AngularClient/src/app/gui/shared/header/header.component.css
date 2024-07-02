@@ -1,0 +1,99 @@
+.header-list {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 10px 20px;
+  width: 100%;
+}
+
+.menu-icon {
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.menu-icon i {
+  font-size: 24px;
+  color: #ffffff;
+}
+
+.ikona-admin {
+  position: relative;
+  margin: 15px;
+
+  margin-right: 35px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+  border: none;
+  transform: scale(2);
+}
+
+.ikona {
+  position: relative;
+  margin: 15px;
+  box-shadow: 0 2px 5px rgba(243, 243, 243, 0.1);
+  background-color: transparent;
+  border: none;
+  transform: scale(2);
+  border-radius: 50%;
+}
+
+.logo {
+  margin-right: 15px;
+  color: #ffffff;
+  font-size: 24px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.logo button {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-button button {
+  background-color: #ff3300;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  margin-right: 15px;
+}
+
+
+.nav-button button:hover {
+  background-color: #cc2900;
+}
+
+.xdd{
+  background-color: #ffcc00; /* Example background color */
+  color: #333; /* Example text color */
+}
+
+.user-info {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.credits {
+  font-size: 18px;
+  color: #ffff00;
+}
+
+.username {
+  font-size: 18px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+<div class="slot-machine">
+    <h2 *ngIf="!this.isAuthorized" style="color: white; position: absolute; left: 7%;">Test game - Login to play for credits!!!</h2>
+    <div class="slots">
+      <div class="reel"></div>
+      <div class="reel"></div>
+      <div class="reel"></div>
+    </div>
+    <div class="control-container">
+    <input type="number " class="bet-input" placeholder="Enter bet amount" [(ngModel)]="betAmount" />
+
+    <div class="first-row-buttons">
+    <button class="control-btn" (click)="setMinBet()">MinBet</button>
+    <button class="control-btn" (click)="startRolling()" >Roll</button>
+    <button class="control-btn" (click)="setMaxBet()">MaxBet</button>
+    </div>
+    <div class="second-row-buttons">
+    <button class="control-btn" (click)="increase25Bet()">+25</button>
+    <button class="control-btn" (click)="increase50Bet()">+50</button>
+    <button class="control-btn" (click)="increase100Bet()">+100</button>
+    </div>
+    <div class="third-row-buttons">
+    <button class="control-btn" (click)="decrease25Bet()">-25</button>
+    <button class="control-btn" (click)="decrease50Bet()">-50</button>
+    <button class="control-btn" (click)="decrease100Bet()">-100</button>
+    </div>
+  </div>
+</div>
+  

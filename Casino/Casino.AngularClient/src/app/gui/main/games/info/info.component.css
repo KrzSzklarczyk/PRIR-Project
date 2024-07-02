@@ -1,0 +1,11 @@
+:host {
+    display: block;
+    margin: auto;
+    padding: 25px;
+    overflow-y: auto;
+    white-space: pre-line;
+  }
+
+  .mat-dialog-content {
+    white-space: pre-wrap;
+  }

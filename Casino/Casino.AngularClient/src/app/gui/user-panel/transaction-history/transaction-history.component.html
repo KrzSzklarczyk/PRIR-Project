@@ -1,0 +1,56 @@
+<div class="match-history-container">
+  <table mat-table [dataSource]="his" class="mat-elevation-z8" multiTemplateDataRows>
+
+    <!-- Date Column -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.date | date}} </td>
+    </ng-container>
+
+    <!-- Amount Column -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Amount </th>
+      <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+    </ng-container>
+
+    <!-- Position1 Column -->
+    <ng-container matColumnDef="position1">
+      <th mat-header-cell *matHeaderCellDef> Position 1 </th>
+      <td mat-cell *matCellDef="let element"> {{element.position1}} </td>
+    </ng-container>
+
+    <!-- Position2 Column -->
+    <ng-container matColumnDef="position2">
+      <th mat-header-cell *matHeaderCellDef> Position 2 </th>
+      <td mat-cell *matCellDef="let element"> {{element.position2}} </td>
+    </ng-container>
+
+    <!-- Position3 Column -->
+    <ng-container matColumnDef="position3">
+      <th mat-header-cell *matHeaderCellDef> Position 3 </th>
+      <td mat-cell *matCellDef="let element"> {{element.position3}} </td>
+    </ng-container>
+
+    <!-- Min Bet Column -->
+    <ng-container matColumnDef="minbet">
+      <th mat-header-cell *matHeaderCellDef> Min Bet </th>
+      <td mat-cell *matCellDef="let element"> {{element.minbet}} </td>
+    </ng-container>
+
+    <!-- Max Bet Column -->
+    <ng-container matColumnDef="maxbet">
+      <th mat-header-cell *matHeaderCellDef> Max Bet </th>
+      <td mat-cell *matCellDef="let element"> {{element.maxbet}} </td>
+    </ng-container>
+
+    <!-- Bet Amount Column -->
+    <ng-container matColumnDef="betAmount">
+      <th mat-header-cell *matHeaderCellDef> Bet Amount </th>
+      <td mat-cell *matCellDef="let element"> {{element.betAmount}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+</div>

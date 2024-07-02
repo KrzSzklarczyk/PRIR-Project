@@ -1,0 +1,118 @@
+body {
+  margin: 0;
+  background: tomato;
+}
+
+.roulette {
+  display: flex;
+  justify-content: center; /* Center the wheel horizontally */
+  align-items: center;
+  height: 100vh;
+  position: relative; /* Ensure the controls can be positioned absolutely */
+}
+
+.roulette .wheel {
+  position: relative; /* Make .wheel the reference point for the .arrow */
+}
+
+.roulette .wheel img {
+  transition: transform 10s cubic-bezier(0.3, 1, 0.7, 1),
+    10s filter cubic-bezier(0.1, 1, 0.8, 1),
+    10s -webkit-filter cubic-bezier(0.1, 1, 0.8, 1);
+  will-change: transform;
+  border-radius: 50%;
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 600px;
+}
+
+.roulette .arrow {
+  width: 0;
+  height: 0;
+  border: 80px solid transparent;
+  border-top: 110px solid tomato;
+  position: absolute; /* Position absolutely within the .wheel */
+  top: -100px; /* Adjust this value to position the arrow correctly */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  border-radius: 0.35em;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Align controls to the right */
+  gap: 20px;
+  position: absolute; /* Position controls absolutely */
+  right: 20px; /* Adjust as needed */
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 8%;
+}
+
+.bet-input, .toggle-button, .spin-button, .number-select {
+  padding: 15px 30px; /* Increase padding for buttons and input fields */
+  font-size: 18px; /* Increase font size */
+  border-radius: 8px; /* Rounded corners */
+  
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.toggle-button {
+  flex: 1;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+  background-color: #ddd;
+  color: #000;
+  margin-right: 8%;
+}
+
+.toggle-button.active {
+  background-color: #bbb;
+}
+
+.black-button {
+  background-color: black;
+  color: white;
+}
+
+.red-button {
+  background-color: red;
+  color: white;
+}
+
+.blue-button {
+  background-color: blue;
+  color: white;
+}
+
+.number-select {
+  width: 343px; /* Adjust width as needed */
+  margin-right: -9%;
+}
+
+.spin-button {
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+  background-color: #ff5722;
+  color: #fff;
+  margin-right: 13%;
+}
+
+.spin-button:hover {
+  background-color: #e64a19;
+}
+
+.spin-button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

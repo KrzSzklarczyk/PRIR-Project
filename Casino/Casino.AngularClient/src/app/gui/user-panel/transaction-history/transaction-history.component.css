@@ -1,0 +1,15 @@
+/* transaction-history.component.css */
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  mat-toolbar {
+    margin-bottom: 20px;
+  }
+  

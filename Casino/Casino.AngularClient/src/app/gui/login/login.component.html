@@ -1,0 +1,25 @@
+<h2 class="title">Login</h2>
+
+<form [formGroup]="form">
+  <div class="auth-form-container">
+    <mat-form-field appearance="fill">
+      <mat-label>username</mat-label>
+      <input matInput formControlName="login" type="text" required>
+      <mat-error *ngIf="validateHTML(form, 'login', 'required')">Enter username</mat-error>
+      <mat-hint class="red-hint" *ngIf="validateHTML(form, 'login', 'minlength')">Username must be at least 4 characters</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" type="password" required>
+      <mat-error *ngIf="validateHTML(form, 'password', 'required')">Password</mat-error>
+      <mat-hint class="red-hint" *ngIf="validateHTML(form, 'password', 'minlength')">Password must be at least 4 characters</mat-hint>
+      <mat-hint class="red-hint" *ngIf="validateHTML(form, 'password', 'passwordInvalid', ['minlength'])">Password must contain uppercase and lowercase letters, a number, and a special character</mat-hint>
+    </mat-form-field>
+
+    <div class="form-btns">
+      <button class="btn btn-lg btn-primary" mat-raised-button color="primary" type="submit" [disabled]="!form.valid" (click)="login(form.value)">Login</button>
+      <button class="btn btn-lg btn-primary" style="background-color: brown;"mat-raised-button [routerLink]="['/register']">Don't have account? Register!</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,43 @@
+<mat-card class="user-profile-card">
+    <mat-card-header>
+      <div mat-card-avatar class="avatar-container">
+        <img mat-card-avatar [src]="avatar" alt="avatar" class="rounded-avatar">
+      </div>
+      <mat-card-title>{{ userName }}</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <button class="btns" mat-button (click)="toggleChangeAvatarForm()">Change Avatar</button>
+      <button mat-button (click)="toggleChangePasswordForm()">Change Password</button>
+      <button mat-button (click)="toggleDeleteForm()">Delete Account</button>
+      <button mat-button routerLink="" (click)="logOut()">Logout</button>
+    </mat-card-content>
+
+    <div *ngIf="showChangePasswordForm" class="change-password-form">
+        <form [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+          <mat-form-field>
+            <mat-label>New Password</mat-label>
+            <input matInput type="password" formControlName="newPassword">
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div *ngIf="showChangeAvatarForm" class="change-avatar-form">
+        <form [formGroup]="changePasswordForm" (ngSubmit)="changeAvatar()">
+          <mat-form-field>
+            <mat-label>New Avatar Url</mat-label>
+            <input matInput type="text" formControlName="newAvatar">
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit">Submit</button>
+        </form>
+    </div>
+    <div *ngIf="showDeleteForm" class="delete-form">
+      <form [formGroup]="changePasswordForm" (ngSubmit)="deleteAccount()">
+        
+        <button mat-raised-button color="primary" type="submit">Confirm</button>
+      </form>
+  </div>
+
+</mat-card>
+  

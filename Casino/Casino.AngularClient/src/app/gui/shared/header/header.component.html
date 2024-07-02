@@ -1,0 +1,57 @@
+<header>
+  <ul class="header-list">
+    <div *ngIf="userRole === userRoleEnum.Admin">
+      <button mat-icon-button class="ikona-admin" [matMenuTriggerFor]="menu">
+        <mat-icon>android</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/admin-user">Panel Uzytkownikow</button>
+    <!--    <button mat-menu-item routerLink="/admin-financial">Panel finansowy</button> -->
+      </mat-menu>
+    </div>
+
+    <li class="logo">
+      <span routerLink="">Keep Gambling Casino</span>
+    </li>
+    <li class="nav-button">
+      <button class="help-button" routerLink="/helpsite">Help</button>
+    </li>
+
+    <div class="nav-button" style="margin-left: auto;">
+      <button
+        *ngIf="!this.isUserAuthenticated()"
+        class="login-button"
+        routerLink="/login"
+      >
+        Login
+      </button>
+      <button
+        *ngIf="!this.isUserAuthenticated()"
+        class="login-button"
+        routerLink="/register"
+      >
+        Register
+      </button>
+    </div>
+
+    <div class="user-info" *ngIf="this.isUserAuthenticated()">
+      <span class="credits">{{ credits | number }}</span>
+      <span class="username" (click)="toggleDropdown()"
+        >{{ userName }}</span
+      >
+      <button *ngIf="!hasAvatar" mat-icon-button [matMenuTriggerFor]="menu" class="ikona">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <div *ngIf="hasAvatar">
+      <img [src]="avatar" alt="Avatar" width="40" height="40" class="ikona" [matMenuTriggerFor]="menu">
+      </div>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/user-profile">Profile</button>
+        <button mat-menu-item routerLink="/user-history">Match History</button>
+        <button mat-menu-item routerLink="/transaction-history">Transaction History</button>
+        <button mat-menu-item routerLink="/user-transaction" style="background-color: green;">Buy Credits!!!</button>
+        <button mat-menu-item (click)="logOut()" routerLink="">LogOut</button>
+      </mat-menu>
+    </div>
+  </ul>
+</header>

@@ -1,0 +1,125 @@
+<div class="match-history-container">
+  <h1>Historia Meczów</h1>
+
+  <h2>Bandit Games</h2>
+  <table mat-table [dataSource]="hisBandit" class="mat-elevation-z8">
+    <!-- Date Column -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let element">{{ element.date | date:'dd/MM/yyyy HH:mm' }}</td>
+    </ng-container>
+
+    <!-- Amount Column -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Result</th>
+      <td mat-cell *matCellDef="let element">{{ element.amount | currency }}</td>
+    </ng-container>
+
+    <!-- Position1 Column -->
+    <ng-container matColumnDef="position1">
+      <th mat-header-cell *matHeaderCellDef>Position 1</th>
+      <td mat-cell *matCellDef="let element">{{ iconMap[element.position1] }}</td>
+    </ng-container>
+
+    <!-- Position2 Column -->
+    <ng-container matColumnDef="position2">
+      <th mat-header-cell *matHeaderCellDef>Position 2</th>
+      <td mat-cell *matCellDef="let element">{{ iconMap[element.position2] }}</td>
+    </ng-container>
+
+    <!-- Position3 Column -->
+    <ng-container matColumnDef="position3">
+      <th mat-header-cell *matHeaderCellDef>Position 3</th>
+      <td mat-cell *matCellDef="let element">{{ iconMap[element.position3] }}</td>
+    </ng-container>
+
+    <!-- MinBet Column -->
+    <ng-container matColumnDef="minbet">
+      <th mat-header-cell *matHeaderCellDef>Min Bet</th>
+      <td mat-cell *matCellDef="let element">{{ element.minbet | currency }}</td>
+    </ng-container>
+
+    <!-- MaxBet Column -->
+    <ng-container matColumnDef="maxbet">
+      <th mat-header-cell *matHeaderCellDef>Max Bet</th>
+      <td mat-cell *matCellDef="let element">{{ element.maxbet | currency }}</td>
+    </ng-container>
+
+    <!-- BetAmount Column -->
+    <ng-container matColumnDef="betAmount">
+      <th mat-header-cell *matHeaderCellDef>Bet Amount</th>
+      <td mat-cell *matCellDef="let element">{{ element.betAmount | currency }}</td>
+    </ng-container>
+
+    <!-- Header and Row Definition -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsBandit"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsBandit;"></tr>
+  </table>
+
+  <h2>Roulette Games</h2>
+  <table mat-table [dataSource]="hisRoulette" class="mat-elevation-z8">
+    <!-- Date Column -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let element">{{ element.date | date:'dd/MM/yyyy HH:mm' }}</td>
+    </ng-container>
+
+    <!-- Amount Column -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Result</th>
+      <td mat-cell *matCellDef="let element">{{ element.amount | currency }}</td>
+    </ng-container>
+
+    <!-- Red Column -->
+    <ng-container matColumnDef="red">
+      <th mat-header-cell *matHeaderCellDef>Red</th>
+      <td mat-cell *matCellDef="let element">{{ element.red ? 'Yes' : 'No' }}</td>
+    </ng-container>
+
+    <!-- Black Column -->
+    <ng-container matColumnDef="black">
+      <th mat-header-cell *matHeaderCellDef>Black</th>
+      <td mat-cell *matCellDef="let element">{{ element.black ? 'Yes' : 'No' }}</td>
+    </ng-container>
+
+   
+    <!-- BetNumber Column -->
+    <ng-container matColumnDef="betnumber">
+      <th mat-header-cell *matHeaderCellDef>Selected</th>
+      <td mat-cell *matCellDef="let element">{{ element.selected !== -1 ? element.selected : 'None' }}</td>
+    </ng-container>
+ <!-- Number Column -->
+ <ng-container matColumnDef="number">
+  <th mat-header-cell *matHeaderCellDef>Rolled</th>
+  <td mat-cell *matCellDef="let element">{{ element.rolled }}</td>
+</ng-container>
+
+    <!-- Rolled Column -->
+    <ng-container matColumnDef="rolled">
+      <th mat-header-cell *matHeaderCellDef>Rolled</th>
+      <td mat-cell *matCellDef="let element">{{ element.rolled ? 'Yes' : 'No' }}</td>
+    </ng-container>
+
+    <!-- MinBet Column -->
+    <ng-container matColumnDef="minbet">
+      <th mat-header-cell *matHeaderCellDef>Min Bet</th>
+      <td mat-cell *matCellDef="let element">{{ element.minbet | currency }}</td>
+    </ng-container>
+
+    <!-- MaxBet Column -->
+    <ng-container matColumnDef="maxbet">
+      <th mat-header-cell *matHeaderCellDef>Max Bet</th>
+      <td mat-cell *matCellDef="let element">{{ element.maxbet | currency }}</td>
+    </ng-container>
+
+    <!-- BetAmount Column -->
+    <ng-container matColumnDef="betAmount">
+      <th mat-header-cell *matHeaderCellDef>Bet Amount</th>
+      <td mat-cell *matCellDef="let element">{{ element.betAmount | currency }}</td>
+    </ng-container>
+
+    <!-- Header and Row Definition -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsRoulette"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsRoulette;"></tr>
+  </table>
+</div>
