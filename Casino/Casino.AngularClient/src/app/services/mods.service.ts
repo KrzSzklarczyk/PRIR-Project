@@ -4,6 +4,7 @@ import {FormGroup} from "@angular/forms";
 import { AuthenticatedResponse } from '../models/authenticated-response';
 import { Router } from '@angular/router';
 import { UserResponseDTO } from '../models/user.models';
+import { firstValueFrom } from 'rxjs';
 
 
 
@@ -20,27 +21,41 @@ export class ModsService {
   }
   Users:UserResponseDTO[]=[];
   cred:AuthenticatedResponse ={accessToken:'',refreshToken:''}
- GetAllUsers=():UserResponseDTO[]=>
-    {this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
-        this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
-        
-    this.Users=[];
-        if (this.cred.accessToken == '' || this.cred.refreshToken == '') {
-         
-          return this.Users
-         }
-        
-        this.http.post<UserResponseDTO[]>("https://localhost:7063/Account/getAllUsers", this.cred, {
-            headers: new HttpHeaders({ "Content-Type": "application/json"})
-          })
-          .subscribe({
-            next: (response: UserResponseDTO[]) => {
-              console.log(response);
-              return response;
-             
-            },
-            error: (err: HttpErrorResponse) => {this.Users=[]}
-          });
-          return this.Users
+  async GetAllUsers(): Promise<UserResponseDTO[]> {
+    // Initialize the Users array
+    this.Users = [];
+    
+    // Get tokens from localStorage
+    this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
+    this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
+    
+    // Check if tokens are present
+    if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
+        return this.Users;
     }
+    
+    try {
+        // Make the HTTP POST request and await the response
+        const response = await firstValueFrom(this.http.post<UserResponseDTO[]>(
+          "https://localhost:7063/Account/getAllUsers",
+          this.cred,
+          {
+            headers: new HttpHeaders({ "Content-Type": "application/json" })
+          }
+        ));
+        
+        // Log the response and update the Users array
+        console.log(response);
+        this.Users = response;
+        return this.Users;
+
+    } catch (err) {
+        // Handle the error by resetting the Users array
+        console.error(err);
+        this.Users = [];
+        return this.Users;
+    }
+  }
 }
+
+

@@ -2,6 +2,7 @@
 using Casino.BLL.Authentication;
 using Casino.BLL.DTO;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Casino.Controllers
 {
@@ -16,24 +17,25 @@ namespace Casino.Controllers
             _transactions = t;
         }
 
-       [HttpPost("History")]
-        public ActionResult ViewHistory([FromBody]UserTokenResponse user)
+        [HttpPost("History")]
+        public async Task<ActionResult> ViewHistory([FromBody] UserTokenResponse user)
         {
-            var history = _transactions.GetHistory(user);
+            var history = await _transactions.GetHistory(user);
             return Ok(history);
         }
+
         [HttpPost("History/{id}")]
-        public ActionResult AdminHistory([FromBody] UserTokenResponse user,int id)
+        public async Task<ActionResult> AdminHistory([FromBody] UserTokenResponse user, int id)
         {
-            var history = _transactions.GetHistory(user,id);
+            var history = await _transactions.GetHistory(user, id);
             return Ok(history);
         }
 
         [HttpPost("New/{amount}")]
-        public ActionResult AddTransaction(int amount, [FromBody] UserTokenResponse user)
+        public async Task<ActionResult> AddTransaction(int amount, [FromBody] UserTokenResponse user)
         {
-            var transtaction = _transactions.AddTransaction(amount,user);
-            return Ok(transtaction);
+            var transaction = await _transactions.AddTransaction(amount, user);
+            return Ok(transaction);
         }
     }
 }

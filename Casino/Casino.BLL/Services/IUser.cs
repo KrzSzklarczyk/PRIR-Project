@@ -11,17 +11,17 @@ namespace Casino.BLL
 {
     public interface IUser
     {
-        public UserTokenResponse Login(UserRequestDTO user);
-        public UserTokenResponse Register(UserRegisterRequestDTO user);
-        public int GetCredits(UserTokenResponse token);
-        public UserResponseDTO GetUserInfo(UserTokenResponse token);
-        public bool changeavatar(UserTokenResponse token,string avatar);
-        public bool changepassword(UserTokenResponse token, string passwd);
-        public bool deleteUser(UserTokenResponse token);
-        public UserTokenResponse RefreshToken(UserTokenResponse token);
-        public List<UserResponseDTO> GetAllUsers(UserTokenResponse token);
-        public int GetUserRole(UserTokenResponse token);
-        public bool RemoveUser(UserTokenResponse token,int Id);
+        public Task<UserTokenResponse> Login(UserRequestDTO user);
+        public Task<UserTokenResponse> Register(UserRegisterRequestDTO user);
+        public Task<int> GetCredits(UserTokenResponse token);
+        public Task<UserResponseDTO> GetUserInfo(UserTokenResponse token);
+        public Task<bool> ChangeAvatar(UserTokenResponse token,string avatar);
+        public Task<bool> ChangePassword(UserTokenResponse token, string passwd);
+        public Task<bool> DeleteUser(UserTokenResponse token);
+        public Task<UserTokenResponse> RefreshToken(UserTokenResponse token);
+        public Task<List<UserResponseDTO>> GetAllUsers(UserTokenResponse token);
+        public Task<int> GetUserRole(UserTokenResponse token);
+        public Task<bool> RemoveUser(UserTokenResponse token,int Id);
         
     }
 }

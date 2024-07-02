@@ -18,41 +18,17 @@ namespace Casino.BLL_EF
 {
     public class ResultEF : IResults
     {
-        public ResultEF(CasinoDbContext dbContext, UserEF use,IMapper map)
+        public ResultEF(CasinoDbContext dbContext, UserEF use, IMapper map)
         {
             _context = dbContext;
             this.use = use;
             mapper = map;
         }
         public UserEF use;
-        public  CasinoDbContext _context ;
-        public IMapper mapper ;
+        public CasinoDbContext _context;
+        public IMapper mapper;
 
-        public ResultResponseDTO GetResult(ResultRequestDTO result, UserTokenResponse token)
-        {
-            
-                var principal = use.GetPrincipalFromExpiredToken(token.AccessToken);
-                var userIdClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
-                if (userIdClaim is null)
-                {
-                    throw new SecurityTokenException("UserId was not found");
-                }
-
-                var userId = int.Parse(userIdClaim.Value);
-                var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
-
-                if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryDate <= DateTime.UtcNow||(user.UserId!=result.UserId&&user.UserType!=Model.DataTypes.UserType.Admin))
-                {
-                    throw new SecurityTokenException();
-                }
-            var xd= _context.Results.FirstOrDefault(x => x.UserId == result.UserId && x.GameId == result.GameId);
-            return xd==null? null: mapper.Map<ResultResponseDTO>(xd);
-           
-
-        }
-
-        public List<ResultResponseDTO> GetAllUserResults( UserTokenResponse token)
+        public async Task<ResultResponseDTO> GetResult(ResultRequestDTO result, UserTokenResponse token)
         {
             var principal = use.GetPrincipalFromExpiredToken(token.AccessToken);
             var userIdClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
@@ -63,38 +39,18 @@ namespace Casino.BLL_EF
             }
 
             var userId = int.Parse(userIdClaim.Value);
-            var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
-
-            if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryDate <= DateTime.UtcNow )
-            {
-                throw new SecurityTokenException();
-            }
-            var xd = _context.Results.Where(x => x.UserId == user.UserId ).ToList();
-            return xd == null ? null : mapper.Map<List<ResultResponseDTO>>(xd);
-        }
-
-        public List<ResultResponseDTO> GetAllGameResults(ResultRequestDTO result, UserTokenResponse token)
-        {
-            var principal = use.GetPrincipalFromExpiredToken(token.AccessToken);
-            var userIdClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
-            if (userIdClaim is null)
-            {
-                throw new SecurityTokenException("UserId was not found");
-            }
-
-            var userId = int.Parse(userIdClaim.Value);
-            var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryDate <= DateTime.UtcNow || (user.UserId != result.UserId && user.UserType != Model.DataTypes.UserType.Admin))
             {
                 throw new SecurityTokenException();
             }
-            var xd = _context.Results.Where(x => x.GameId == result.GameId).ToList();
-            return xd == null ? null : mapper.Map<List<ResultResponseDTO>>(xd);
+
+            var xd = await _context.Results.FirstOrDefaultAsync(x => x.UserId == result.UserId && x.GameId == result.GameId);
+            return xd == null ? null : mapper.Map<ResultResponseDTO>(xd);
         }
 
-        public List<ResultResponseDTO> GetAllUserResults(UserTokenResponse token, int id)
+        public async Task<List<ResultResponseDTO>> GetAllUserResults(UserTokenResponse token)
         {
             var principal = use.GetPrincipalFromExpiredToken(token.AccessToken);
             var userIdClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
@@ -105,13 +61,58 @@ namespace Casino.BLL_EF
             }
 
             var userId = int.Parse(userIdClaim.Value);
-            var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
-            if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryDate <= DateTime.UtcNow||user.UserType!=UserType.Admin)
+            if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryDate <= DateTime.UtcNow)
             {
                 throw new SecurityTokenException();
             }
-            var xd = _context.Results.Where(x => x.UserId == id).ToList();
+
+            var xd = await _context.Results.Where(x => x.UserId == user.UserId).ToListAsync();
+            return xd == null ? null : mapper.Map<List<ResultResponseDTO>>(xd);
+        }
+
+        public async Task<List<ResultResponseDTO>> GetAllGameResults(ResultRequestDTO result, UserTokenResponse token)
+        {
+            var principal = use.GetPrincipalFromExpiredToken(token.AccessToken);
+            var userIdClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim is null)
+            {
+                throw new SecurityTokenException("UserId was not found");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryDate <= DateTime.UtcNow || (user.UserId != result.UserId && user.UserType != Model.DataTypes.UserType.Admin))
+            {
+                throw new SecurityTokenException();
+            }
+
+            var xd = await _context.Results.Where(x => x.GameId == result.GameId).ToListAsync();
+            return xd == null ? null : mapper.Map<List<ResultResponseDTO>>(xd);
+        }
+
+        public async Task<List<ResultResponseDTO>> GetAllUserResults(UserTokenResponse token, int id)
+        {
+            var principal = use.GetPrincipalFromExpiredToken(token.AccessToken);
+            var userIdClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim is null)
+            {
+                throw new SecurityTokenException("UserId was not found");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryDate <= DateTime.UtcNow || user.UserType != UserType.Admin)
+            {
+                throw new SecurityTokenException();
+            }
+
+            var xd = await _context.Results.Where(x => x.UserId == id).ToListAsync();
             return xd == null ? null : mapper.Map<List<ResultResponseDTO>>(xd);
         }
     }

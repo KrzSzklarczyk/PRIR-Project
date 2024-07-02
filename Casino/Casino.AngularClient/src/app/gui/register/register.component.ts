@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { AuthenticatedResponse } from '../../models/authenticated-response';
 import { UserRegisterRequestDTO } from '../../models/register-model';
 import { UserService } from '../../services/user.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -50,29 +51,39 @@ export class RegisterComponent {
         ]));
   }
 
-  rejestracja = ( data: UserRegisterRequestDTO ) => {
+  async rejestracja(data: UserRegisterRequestDTO): Promise<void> {
+    try {
       this.credentials.login = data.login;
       this.credentials.password = data.password;
       this.credentials.email = data.email;
-      this.credentials.avatar = "";
+      this.credentials.avatar = '';
       this.credentials.nickName = data.login;
-      this.http.post<AuthenticatedResponse>("https://localhost:7063/Account/register", this.credentials, {
-        headers: new HttpHeaders({ "Content-Type": "application/json"})
-      })
-      .subscribe({
-        next: (response: AuthenticatedResponse) => {
-          const token = response.accessToken;
-          const refreshToken = response.refreshToken;
-          localStorage.setItem("accessToken", token);
-          localStorage.setItem("refreshToken", refreshToken);
-          this.invalidLogin = false;
-          this.router.navigate(["/"]);
-        },
-        error: (err: HttpErrorResponse) => {
-          console.error("register error:", err);
-          this.invalidLogin = true;
-          alert("Error creating user. Given username already exists or there is no connection with database. Please try again.");
-        }
-      })
+
+      // Convert Observable to Promise using firstValueFrom
+      const response: AuthenticatedResponse = await firstValueFrom(
+        this.http.post<AuthenticatedResponse>("https://localhost:7063/Account/register", this.credentials, {
+          headers: new HttpHeaders({ "Content-Type": "application/json" })
+        })
+      );
+
+      // Handle successful response
+      const token = response.accessToken;
+      const refreshToken = response.refreshToken;
+      localStorage.setItem("accessToken", token);
+      localStorage.setItem("refreshToken", refreshToken);
+      this.invalidLogin = false;
+      this.router.navigate(["/"]);
+
+    } catch (err) {
+      if (err instanceof HttpErrorResponse) {
+        console.error("Register error:", err);
+        this.invalidLogin = true;
+        alert("Error creating user. Given username already exists or there is no connection with the database. Please try again.");
+      } else {
+        console.error("Unexpected error:", err);
+        this.invalidLogin = true;
+        alert("An unexpected error occurred. Please try again.");
+      }
+    }
   }
 }

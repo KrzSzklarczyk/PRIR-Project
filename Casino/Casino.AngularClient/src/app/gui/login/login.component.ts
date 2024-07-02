@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import{AuthenticatedResponse} from "../../models/authenticated-response";
 import { LoginModel } from '../../models/login-model';
 import { UserService } from '../../services/user.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -37,26 +38,36 @@ export class LoginComponent {
     ])
   }
 
-  login = ( data: LoginModel) => {
-    this.credentials.login = data.login;
-    this.credentials.password = data.password;
-    this.http.post<AuthenticatedResponse>("https://localhost:7063/Account/Login", this.credentials, {
-      headers: new HttpHeaders({ "Content-Type": "application/json"})
-    })
-    .subscribe({
-      next: (response: AuthenticatedResponse) => {
-        const token = response.accessToken;
-        const refreshToken = response.refreshToken;
-        localStorage.setItem("accessToken", token);
-        localStorage.setItem("refreshToken", refreshToken);
-        this.invalidLogin = false;
-        this.router.navigate(["/"]);
-      },
-      error: (err: HttpErrorResponse) => {
+  async login(data: LoginModel): Promise<void> {
+    try {
+      this.credentials.login = data.login;
+      this.credentials.password = data.password;
+
+      // Convert Observable to Promise using firstValueFrom
+      const response: AuthenticatedResponse = await firstValueFrom(
+        this.http.post<AuthenticatedResponse>("https://localhost:7063/Account/Login", this.credentials, {
+          headers: { 'Content-Type': 'application/json' }
+        })
+      );
+
+      // Handle successful response
+      const token = response.accessToken;
+      const refreshToken = response.refreshToken;
+      localStorage.setItem("accessToken", token);
+      localStorage.setItem("refreshToken", refreshToken);
+      this.invalidLogin = false;
+      this.router.navigate(["/"]);
+
+    } catch (err) {
+      if (err instanceof HttpErrorResponse) {
         console.error("Login error:", err);
         this.invalidLogin = true;
         alert("Invalid username or password. Please try again.");
+      } else {
+        console.error("Unexpected error:", err);
+        this.invalidLogin = true;
+        alert("An unexpected error occurred. Please try again.");
       }
-    })  
+    }
   }
 }

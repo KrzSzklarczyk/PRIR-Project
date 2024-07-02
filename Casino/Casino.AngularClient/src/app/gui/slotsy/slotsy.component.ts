@@ -5,6 +5,7 @@ import { NgModel } from '@angular/forms';
 import { AuthenticatedResponse } from '../../models/authenticated-response';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserResponseDTO } from '../../models/user.models';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -62,31 +63,37 @@ export class SlotsyComponent implements OnInit {
     }
   }
 }
-SendGame=(pos1:number,pos2:number,pos3:number,amount:number):void=>
-  {
-    this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
-    this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
+SendGame = async (pos1: number, pos2: number, pos3: number, amount: number): Promise<void> => {
+  // Retrieve the accessToken and refreshToken from localStorage
+  this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
+  this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
 
-    if (this.cred.accessToken == '' || this.cred.refreshToken == '') {
-      return
-    } else {
-      const url = `https://localhost:7063/Game/PlayBandit/${pos1}/${pos2}/${pos3}/${amount}`;
-      this.http
-        .post<boolean>(
-          url,
-          this.cred,
-          {
-            headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-          }
-        )
-        .subscribe({
-          next: (response: boolean) => {
-            return
-          },
-        });
-    }
+  // Check if either token is missing
+  if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
+    return;
   }
 
+  // Construct the URL for the POST request
+  const url = `https://localhost:7063/Game/PlayBandit/${pos1}/${pos2}/${pos3}/${amount}`;
+
+  // Perform the POST request and await the result
+  try {
+    const response = await firstValueFrom(
+      this.http.post<boolean>(
+        url,
+        this.cred,
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        }
+      )
+    );
+    // Handle the response if needed
+    console.log(response); // Optional: Log the response or handle it as needed
+  } catch (error) {
+    // Handle errors if any
+    console.error('An error occurred:', error);
+  }
+}
   setMinBet(): void {
     this.betAmount = 25;
   }

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticatedResponse } from '../../models/authenticated-response';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-roulette',
@@ -50,41 +51,49 @@ this.rolledNumber=this.getRandomInt(0, 37);
     setTimeout(() => {
       this.renderer.setStyle(this.el.nativeElement.querySelector('.wheel img'), 'filter', 'blur(0px)');
     }, numofsecs);
-    this.sendGmae()
+    this.sendGame()
   }
   }
-sendGmae():void{
-
-  {
+  async sendGame(): Promise<void> {
     this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
     this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
 
-    if (this.cred.accessToken == '' || this.cred.refreshToken == '') {
-      return
-    } else {
-      const tmp= this.selectedNumber==null?this.selectedButton=="blue"?0:-1:this.selectedNumber
-      const r= this.selectedButton=="red"
-      const b= this.selectedButton=="black"
+    if (!this.cred.accessToken || !this.cred.refreshToken) {
+      console.error('No access or refresh token found');
+      return;
+    }
 
-      const url = `https://localhost:7063/Game/PlayRoullete/${tmp}/${r}/${b}/${this.betAmount}/${this.rolledNumber}`;
+    const tmp = this.selectedNumber === null
+      ? this.selectedButton === 'blue'
+        ? 0
+        : -1
+      : this.selectedNumber;
+
+    const r = this.selectedButton === 'red';
+    const b = this.selectedButton === 'black';
+
+    const url = `https://localhost:7063/Game/PlayRoullete/${tmp}/${r}/${b}/${this.betAmount}/${this.rolledNumber}`;
+
+    try {
       console.log(url);
-      this.http
-        .post<boolean>(
+      const response: boolean = await firstValueFrom(
+        this.http.post<boolean>(
           url,
           this.cred,
           {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
           }
         )
-        .subscribe({
-          next: (response: boolean) => {
-            console.log(response)
-            return
-          },
-        });
+      );
+      console.log(response);
+      // Handle successful response
+    } catch (err) {
+      console.error('Error during game play:', err);
+      // Optionally, handle the error
+      alert('An error occurred while sending the game request. Please try again.');
     }
   }
-}
+
   toggleButton(button: string): void {
     this.selectedButton = this.selectedButton === button ? null : button;
     this.selectedNumber = null;

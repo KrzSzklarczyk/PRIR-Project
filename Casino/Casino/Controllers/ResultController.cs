@@ -1,9 +1,8 @@
-﻿
-using Casino.BLL;
+﻿using Casino.BLL;
 using Casino.BLL.Authentication;
 using Casino.BLL.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Threading.Tasks;
 
 namespace Casino.Controllers
 {
@@ -18,38 +17,34 @@ namespace Casino.Controllers
             this._result = res;
         }
 
-      [HttpPost("GetAllResults/{userID},{gameID}")]
-        public ActionResult GetResults(int userID, int gameID, [FromBody]UserTokenResponse toekn )
-        { 
-            var rez = new ResultRequestDTO { UserId=userID,GameId=gameID };
-            var odp = _result.GetResult(rez,toekn);
-            return odp==null?BadRequest("bledne dane lub brak"): Ok (odp);
+        [HttpPost("GetAllResults/{userID},{gameID}")]
+        public async Task<ActionResult> GetResults(int userID, int gameID, [FromBody] UserTokenResponse token)
+        {
+            var rez = new ResultRequestDTO { UserId = userID, GameId = gameID };
+            var odp = await _result.GetResult(rez, token);
+            return odp == null ? BadRequest("bledne dane lub brak") : Ok(odp);
         }
 
         [HttpPost("GetUserResult")]
-        public ActionResult GetResultsUser( [FromBody] UserTokenResponse toekn)
+        public async Task<ActionResult> GetResultsUser([FromBody] UserTokenResponse token)
         {
-           
-            var odp = _result.GetAllUserResults( toekn);
+            var odp = await _result.GetAllUserResults(token);
             return odp == null ? BadRequest("bledne dane lub brak") : Ok(odp);
-            
         }
+
         [HttpPost("GetUserResult/{id}")]
-        public ActionResult AdminUserRes([FromBody] UserTokenResponse toekn,int id)
+        public async Task<ActionResult> AdminUserRes([FromBody] UserTokenResponse token, int id)
         {
-
-            var odp = _result.GetAllUserResults(toekn,id);
+            var odp = await _result.GetAllUserResults(token, id);
             return odp == null ? BadRequest("bledne dane lub brak") : Ok(odp);
-
         }
 
         [HttpPost("GetGameResult/{gameID}")]
-        public ActionResult GetResultsGame(int gameID, [FromBody] UserTokenResponse toekn)
+        public async Task<ActionResult> GetResultsGame(int gameID, [FromBody] UserTokenResponse token)
         {
-            var rez = new ResultRequestDTO {  GameId = gameID };
-            var odp = _result.GetAllGameResults(rez, toekn);
+            var rez = new ResultRequestDTO { GameId = gameID };
+            var odp = await _result.GetAllGameResults(rez, token);
             return odp == null ? BadRequest("bledne dane lub brak") : Ok(odp);
-            
         }
     }
 }

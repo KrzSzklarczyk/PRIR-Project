@@ -2,10 +2,6 @@
 using Casino.BLL.Authentication;
 using Casino.BLL.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Casino.Controllers
 {
@@ -14,80 +10,89 @@ namespace Casino.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IUser _User;
-        
+
         public AccountController(IUser u)
         {
             _User = u;
         }
 
-        [HttpPost,Route("Login")]
-        public  IActionResult Login([FromBody] UserRequestDTO user)
-        {            
-            var xd=_User.Login(user);
+        [HttpPost, Route("Login")]
+        public async Task<IActionResult> Login([FromBody] UserRequestDTO user)
+        {
+            var xd = await _User.Login(user);
             if (xd != null) { return Ok(xd); }
-            return BadRequest("User nie istnieje");
-        
+            return BadRequest("User does not exist");
         }
-
 
         [HttpPost, Route("register")]
-        public IActionResult Register([FromBody] UserRegisterRequestDTO user)
+        public async Task<IActionResult> Register([FromBody] UserRegisterRequestDTO user)
         {
-            var xd = _User.Register(user);
-            if (xd != null) { return Ok( xd); }
-            return BadRequest("Bladne dane albo user juz istnieje");
+            var xd = await _User.Register(user);
+            if (xd != null) { return Ok(xd); }
+            return BadRequest("Invalid data or user already exists");
+        }
 
-        }
         [HttpPost("refresh")]
-        public ActionResult Refresh([FromBody] UserTokenResponse token)
+        public async Task<ActionResult> Refresh([FromBody] UserTokenResponse token)
         {
-            var refreshToken = _User.RefreshToken(token);
+            var refreshToken = await _User.RefreshToken(token);
             return Ok(refreshToken);
         }
+
         [HttpPost("getCredits")]
-        public ActionResult getCredits([FromBody] UserTokenResponse token)
+        public async Task<ActionResult> GetCredits([FromBody] UserTokenResponse token)
         {
-            var refreshToken = _User.GetCredits(token);
-            return Ok(refreshToken);
+            var credits = await _User.GetCredits(token);
+            return Ok(credits);
         }
+
         [HttpPost("getAllUsers")]
-        public ActionResult getusers([FromBody] UserTokenResponse token)
+        public async Task<ActionResult> GetUsers([FromBody] UserTokenResponse token)
         {
-            var refreshToken = _User.GetAllUsers(token);
-            return Ok(refreshToken);
+            var users = await _User.GetAllUsers(token);
+            return Ok(users);
         }
+
         [HttpPost("getUserInfo")]
-        public ActionResult getuserInfo([FromBody] UserTokenResponse token)
+        public async Task<ActionResult> GetUserInfo([FromBody] UserTokenResponse token)
         {
-            var refreshToken = _User.GetUserInfo(token);
-            return Ok(refreshToken);
+            var userInfo = await _User.GetUserInfo(token);
+            return Ok(userInfo);
         }
 
         [HttpPost("GetUserRole")]
-        public ActionResult GetUserRole([FromBody] UserTokenResponse token)
+        public async Task<ActionResult> GetUserRole([FromBody] UserTokenResponse token)
         {
-            var refreshToken = _User.GetUserRole(token);
-            return Ok(refreshToken.ToString());
+            var role = await _User.GetUserRole(token);
+            return Ok(role.ToString());
         }
+
         [HttpPost("RemoveUser/{id}")]
-        public ActionResult RemoveUser([FromBody] UserTokenResponse token,int id)
+        public async Task<ActionResult> RemoveUser([FromBody] UserTokenResponse token, int id)
         {
-           return Ok(_User.RemoveUser(token,id));
+            var result = await _User.RemoveUser(token, id);
+            return Ok(result);
         }
+
         [HttpPut("ChangePasswd")]
-        public ActionResult ChangePasswd([FromBody] UserChangeDTO userChangeDTO)
+        public async Task<ActionResult> ChangePasswd([FromBody] UserChangeDTO userChangeDTO)
         {
-            return Ok(_User.changepassword(userChangeDTO.token, userChangeDTO.cos));
+            var result = await _User.ChangePassword(userChangeDTO.token, userChangeDTO.cos);
+            return Ok(result);
         }
+
         [HttpPut("ChangeAvatar")]
-        public ActionResult ChangeAvatar([FromBody] UserChangeDTO userChangeDTO)
+        public async Task<ActionResult> ChangeAvatar([FromBody] UserChangeDTO userChangeDTO)
         {
-            return Ok(_User.changeavatar(userChangeDTO.token, userChangeDTO.cos));
+            var result = await _User.ChangeAvatar(userChangeDTO.token, userChangeDTO.cos);
+            return Ok(result);
         }
+
         [HttpPut("RemoveAcc")]
-        public ActionResult RemoveAcc([FromBody] UserTokenResponse toekn)
+        public async Task<ActionResult> RemoveAcc([FromBody] UserTokenResponse token)
         {
-            return Ok(_User.deleteUser(toekn));
+            var result = await _User.DeleteUser(token);
+            return Ok(result);
         }
     }
 }

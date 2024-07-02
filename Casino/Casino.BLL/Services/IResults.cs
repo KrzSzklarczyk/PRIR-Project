@@ -10,9 +10,9 @@ namespace Casino.BLL
 {
     public interface IResults
     {
-        public ResultResponseDTO GetResult(ResultRequestDTO result, UserTokenResponse token);
-        public List<ResultResponseDTO> GetAllUserResults( UserTokenResponse token);
-        public List<ResultResponseDTO> GetAllUserResults( UserTokenResponse token,int id);
-        public List<ResultResponseDTO> GetAllGameResults(ResultRequestDTO result, UserTokenResponse token);
+        public Task<ResultResponseDTO> GetResult(ResultRequestDTO result, UserTokenResponse token);
+        public Task<List<ResultResponseDTO>> GetAllUserResults( UserTokenResponse token);
+        public Task<List<ResultResponseDTO>> GetAllUserResults( UserTokenResponse token,int id);
+        public Task<List<ResultResponseDTO>> GetAllGameResults(ResultRequestDTO result, UserTokenResponse token);
     }
 }

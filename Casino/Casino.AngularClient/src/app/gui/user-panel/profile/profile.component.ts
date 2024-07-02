@@ -12,6 +12,7 @@ import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
 import { UserChangeDTO } from '../../../models/userChangeDto';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -65,33 +66,40 @@ export class ProfileComponent {
     refreshToken: localStorage.getItem('refreshToken') ?? '',
   };
 
-  changeAvatar() {
+  async changeAvatar(): Promise<void> {
+    // Get the new avatar value from the form
     const awa = this.changePasswordForm.get('newAvatar')?.value;
+  
+    // Retrieve the accessToken and refreshToken from localStorage
     this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
     this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
-
+  
+    // Create the DTO object for the request
     const us: UserChangeDTO = { token: this.cred, cos: awa };
-    if (this.cred.accessToken == '' || this.cred.refreshToken == '') {
+  
+    // Check if either token is missing
+    if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
       return;
     }
-
-    this.http
-      .put<boolean>('https://localhost:7063/Account/ChangeAvatar', us, {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-      })
-      .subscribe({
-        next: (response: boolean) => {
-          console.log('testtttt');
-          this.getUserInfo();
-          return;
-        },
-        error: (err: HttpErrorResponse) => {
-          return;
-        },
-      });
-    this.getUserInfo();
+  
+    // Perform the PUT request and await the result
+    try {
+      await firstValueFrom(
+        this.http.put<boolean>('https://localhost:7063/Account/ChangeAvatar', us, {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        })
+      );
+      console.log('Avatar changed successfully');
+      // Call getUserInfo after the avatar is changed successfully
+      await this.getUserInfo();
+    } catch (error) {
+      if (error instanceof HttpErrorResponse) {
+        console.error('An error occurred:', error.message);
+      } else {
+        console.error('An unexpected error occurred:', error);
+      }
+    }
   }
-
   toggleChangePasswordForm() {
     this.getUserInfo();
     this.showChangePasswordForm = !this.showChangePasswordForm;
@@ -112,51 +120,74 @@ export class ProfileComponent {
     this.showChangeAvatarForm = false;
   }
 
-  changePassword() {
-    if (this.changePasswordForm.valid) {
-      const newPassword = this.changePasswordForm.get('newPassword')?.value;
-      this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
-      this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
-
-      const us: UserChangeDTO = { token: this.cred, cos: newPassword };
-      if (this.cred.accessToken == '' || this.cred.refreshToken == '') {
-        return;
-      }
-
-      this.http
-        .put<boolean>('https://localhost:7063/Account/ChangePasswd', us, {
+  async changePassword(): Promise<void> {
+    // Check if the form is valid
+    if (!this.changePasswordForm.valid) {
+      alert("Invalid Password!!! Password should have: small letters, UpperCase, digits, and special characters. Please try again.");
+      return;
+    }
+  
+    // Get the new password value from the form
+    const newPassword = this.changePasswordForm.get('newPassword')?.value;
+  
+    // Retrieve the accessToken and refreshToken from localStorage
+    this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
+    this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
+  
+    // Create the DTO object for the request
+    const us: UserChangeDTO = { token: this.cred, cos: newPassword };
+  
+    // Check if either token is missing
+    if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
+      return;
+    }
+  
+    try {
+      // Perform the PUT request and await the result
+      await firstValueFrom(
+        this.http.put<boolean>('https://localhost:7063/Account/ChangePasswd', us, {
           headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
         })
-        .subscribe({
-          next: (response: boolean) => {
-            return;
-          },
-          error: (err: HttpErrorResponse) => {
-            return;
-          },
-        });
-    }
-    if(!this.changePasswordForm.valid) {
-        alert("Invalid Password!!! Password should have : small letters, UpperCase, digits and special characters. Please try again."); 
+      );
+      console.log('Password changed successfully');
+      // Call getUserInfo after the password is changed successfully
+      await this.getUserInfo();
+    } catch (error) {
+      if (error instanceof HttpErrorResponse) {
+        console.error('An error occurred:', error.message);
+      } else {
+        console.error('An unexpected error occurred:', error);
+      }
     }
   }
 
-  deleteAccount() {
+  async deleteAccount() {
+    // Retrieve tokens from local storage
     this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
     this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
-
-    if (this.cred.accessToken == '' || this.cred.refreshToken == '') {
-    } else {
-      this.http
-        .put<boolean>('https://localhost:7063/Account/RemoveAcc', this.cred, {
+  
+    // Check if tokens are available
+    if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
+      // Handle the case where tokens are not available
+      console.error('Access token or refresh token is missing');
+      return;
+    }
+  
+    try {
+      // Perform the HTTP PUT request to delete the account
+      await firstValueFrom(
+        this.http.put<boolean>('https://localhost:7063/Account/RemoveAcc', this.cred, {
           headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
         })
-        .subscribe({
-          next: (response: boolean) => {},
-        });
+      );
+      // Log out the user
+      this.logOut();
+      // Navigate to the home page
+      this.router.navigate(['/']);
+    } catch (error) {
+      // Handle potential errors
+      console.error('Failed to delete the account:', error);
     }
-    this.logOut();
-    this.router.navigate(['/']);
   }
 
   logOut() {
@@ -166,28 +197,37 @@ export class ProfileComponent {
     this.authService.logOut();
   }
 
-  getUserInfo() {
+  async getUserInfo() {
+    // Retrieve tokens from local storage
     this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
     this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
-
-    if (this.cred.accessToken == '' || this.cred.refreshToken == '') {
-    } else {
-      this.http
-        .post<UserResponseDTO>(
+  
+    // Check if tokens are available
+    if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
+      console.error('Access token or refresh token is missing');
+      return;
+    }
+  
+    try {
+      // Perform the HTTP POST request to get user information
+      const response = await firstValueFrom(
+        this.http.post<UserResponseDTO>(
           'https://localhost:7063/Account/getUserInfo',
           this.cred,
           {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
           }
         )
-        .subscribe({
-          next: (response: UserResponseDTO) => {
-            this.userName = response.nickName;
-            this.credits = response.credits;
-            this.userRole = response.userType;
-            this.avatar = response.avatar;
-          },
-        });
+      );
+  
+      // Handle the response
+      this.userName = response.nickName;
+      this.credits = response.credits;
+      this.userRole = response.userType;
+      this.avatar = response.avatar;
+    } catch (error) {
+      // Handle potential errors
+      console.error('Failed to get user info:', error);
     }
   }
 }
