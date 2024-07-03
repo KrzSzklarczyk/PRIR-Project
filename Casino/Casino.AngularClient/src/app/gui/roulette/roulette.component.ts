@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticatedResponse } from '../../models/authenticated-response';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-
+import * as addr from '../../../addres'
 @Component({
   selector: 'app-roulette',
   templateUrl: './roulette.component.html',
@@ -72,7 +72,7 @@ this.rolledNumber=this.getRandomInt(0, 37);
     const r = this.selectedButton === 'red';
     const b = this.selectedButton === 'black';
 
-    const url = `https://localhost:7063/Game/PlayRoullete/${tmp}/${r}/${b}/${this.betAmount}/${this.rolledNumber}`;
+    const url = `https://${addr.ipaddr}:7063/Game/PlayRoullete/${tmp}/${r}/${b}/${this.betAmount}/${this.rolledNumber}`;
 
     try {
       console.log(url);

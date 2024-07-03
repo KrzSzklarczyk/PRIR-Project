@@ -6,7 +6,7 @@ import { AuthenticatedResponse } from '../../models/authenticated-response';
 import { UserRegisterRequestDTO } from '../../models/register-model';
 import { UserService } from '../../services/user.service';
 import { firstValueFrom } from 'rxjs';
-
+import * as addr from '../../../addres'
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -61,7 +61,7 @@ export class RegisterComponent {
 
       // Convert Observable to Promise using firstValueFrom
       const response: AuthenticatedResponse = await firstValueFrom(
-        this.http.post<AuthenticatedResponse>("https://localhost:7063/Account/register", this.credentials, {
+        this.http.post<AuthenticatedResponse>(`https://${addr.ipaddr}:7063/Account/register`, this.credentials, {
           headers: new HttpHeaders({ "Content-Type": "application/json" })
         })
       );

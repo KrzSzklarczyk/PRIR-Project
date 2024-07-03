@@ -6,7 +6,7 @@ import { AuthenticatedResponse } from '../../models/authenticated-response';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserResponseDTO } from '../../models/user.models';
 import { firstValueFrom } from 'rxjs';
-
+import * as addr from '../../../addres'
 @Component({
   selector: 'app-root',
   templateUrl: './slotsy.component.html',
@@ -74,7 +74,7 @@ SendGame = async (pos1: number, pos2: number, pos3: number, amount: number): Pro
   }
 
   // Construct the URL for the POST request
-  const url = `https://localhost:7063/Game/PlayBandit/${pos1}/${pos2}/${pos3}/${amount}`;
+  const url = `https://${addr.ipaddr}:7063/Game/PlayBandit/${pos1}/${pos2}/${pos3}/${amount}`;
 
   // Perform the POST request and await the result
   try {

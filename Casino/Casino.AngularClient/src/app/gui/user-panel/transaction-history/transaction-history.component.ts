@@ -3,7 +3,7 @@ import { AuthenticatedResponse } from '../../../models/authenticated-response';
 import { TransactionsResponseDTO } from '../../../models/TransactionDTO';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-
+import * as addr from '../../../../addres'
 @Component({
   selector: 'app-transaction-history',
   templateUrl: './transaction-history.component.html',
@@ -28,7 +28,7 @@ async GetHistory(): Promise<void> {
     return;
   }
 
-  const url = 'https://localhost:7063/Transaction/History';
+  const url = `https://${addr.ipaddr}:7063/Transaction/History`;
 
   try {
     // Perform the HTTP POST request to get transaction history

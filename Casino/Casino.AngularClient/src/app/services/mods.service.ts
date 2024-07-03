@@ -5,6 +5,7 @@ import { AuthenticatedResponse } from '../models/authenticated-response';
 import { Router } from '@angular/router';
 import { UserResponseDTO } from '../models/user.models';
 import { firstValueFrom } from 'rxjs';
+import * as addr from '../../addres'
 
 
 
@@ -37,7 +38,7 @@ export class ModsService {
     try {
         // Make the HTTP POST request and await the response
         const response = await firstValueFrom(this.http.post<UserResponseDTO[]>(
-          "https://localhost:7063/Account/getAllUsers",
+          `https://${addr.ipaddr}:7063/Account/getAllUsers`,
           this.cred,
           {
             headers: new HttpHeaders({ "Content-Type": "application/json" })

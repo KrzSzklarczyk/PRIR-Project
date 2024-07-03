@@ -13,7 +13,7 @@ import { AuthService } from '../../../services/auth.service';
 import { UserChangeDTO } from '../../../models/userChangeDto';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-
+import * as addr from '../../../../addres'
 @Component({
   selector: 'app-user-profile',
   templateUrl: './profile.component.html',
@@ -85,7 +85,7 @@ export class ProfileComponent {
     // Perform the PUT request and await the result
     try {
       await firstValueFrom(
-        this.http.put<boolean>('https://localhost:7063/Account/ChangeAvatar', us, {
+        this.http.put<boolean>(`https://${addr.ipaddr}:7063/Account/ChangeAvatar`, us, {
           headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
         })
       );
@@ -145,7 +145,7 @@ export class ProfileComponent {
     try {
       // Perform the PUT request and await the result
       await firstValueFrom(
-        this.http.put<boolean>('https://localhost:7063/Account/ChangePasswd', us, {
+        this.http.put<boolean>(`https://${addr.ipaddr}:7063/Account/ChangePasswd`, us, {
           headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
         })
       );
@@ -176,7 +176,7 @@ export class ProfileComponent {
     try {
       // Perform the HTTP PUT request to delete the account
       await firstValueFrom(
-        this.http.put<boolean>('https://localhost:7063/Account/RemoveAcc', this.cred, {
+        this.http.put<boolean>(`https://${addr.ipaddr}:7063/Account/RemoveAcc`, this.cred, {
           headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
         })
       );
@@ -212,7 +212,7 @@ export class ProfileComponent {
       // Perform the HTTP POST request to get user information
       const response = await firstValueFrom(
         this.http.post<UserResponseDTO>(
-          'https://localhost:7063/Account/getUserInfo',
+          `https://${addr.ipaddr}:7063/Account/getUserInfo`,
           this.cred,
           {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

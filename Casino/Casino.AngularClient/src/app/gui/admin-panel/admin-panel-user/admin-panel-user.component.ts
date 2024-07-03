@@ -9,7 +9,7 @@ import { BanditResponseDTO } from '../../../models/banditDTO';
 import { GameResponseDTO } from '../../../models/gameDTO';
 import { ResultResponseDTO } from '../../../models/ResultDTO';
 import { RouletteResponseDTO } from '../../../models/rouletteDTO'; // Ensure this DTO exists and is correctly imported
-
+import * as addr from '../../../../addres'
 interface BanditHistoryEntry {
   date: string | Date;
   amount: number;
@@ -79,7 +79,7 @@ export class AdminPanelUserComponent implements OnInit {
       this.transactionHistory = [];
       return;
     }
-    const url = `https://localhost:7063/Transaction/History/${id}`;
+    const url = `https://${addr.ipaddr}:7063/Transaction/History/${id}`;
     this.http.post<TransactionsResponseDTO[]>(url, this.cred, {
       headers: new HttpHeaders({ "Content-Type": "application/json" })
     }).subscribe({

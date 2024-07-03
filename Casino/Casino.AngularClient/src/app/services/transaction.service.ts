@@ -4,7 +4,7 @@ import {FormGroup} from "@angular/forms";
 import { AuthenticatedResponse } from '../models/authenticated-response';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-
+import * as addr from '../../addres'
 
 
 
@@ -30,7 +30,7 @@ export class TransactionService {
       return false;
     }
   
-    const url = `https://localhost:7063/Transaction/New/${credits}`;
+    const url = `https://${addr.ipaddr}:7063/Transaction/New/${credits}`;
   
     try {
       // Perform the HTTP POST request to add credits
