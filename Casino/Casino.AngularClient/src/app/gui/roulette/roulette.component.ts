@@ -72,7 +72,7 @@ this.rolledNumber=this.getRandomInt(0, 37);
     const r = this.selectedButton === 'red';
     const b = this.selectedButton === 'black';
 
-    const url = `https://${addr.ipaddr}/Game/PlayRoullete/${tmp}/${r}/${b}/${this.betAmount}/${this.rolledNumber}`;
+    const url = `${addr.ipaddr}/Game/PlayRoullete/${tmp}/${r}/${b}/${this.betAmount}/${this.rolledNumber}`;
 
     try {
       console.log(url);

@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.getUserInfo();
       this.hasAvatar = !!this.avatar;
    
-    }, 300);
+    }, 1000);
   }
 
 
@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.avatar = '';
       return;
     }
-const url=`https://${addr.ipaddr}/Account/getUserInfo`
+const url=`${addr.ipaddr}/Account/getUserInfo`
     try {
       const response: UserResponseDTO = await firstValueFrom(
         this.http.post<UserResponseDTO>(url

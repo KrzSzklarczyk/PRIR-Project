@@ -14,8 +14,6 @@ using Casino.BLL.Authentication;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -51,11 +49,11 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddBLL();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<UserEF>();
-builder.Services.AddScoped<IUser,UserEF >();
-builder.Services.AddScoped<IGame,GameEF >();
-builder.Services.AddScoped<IResults,ResultEF >();
-builder.Services.AddScoped<ITransactions,TransactionsEF >();
-builder.Services.AddDbContext<CasinoDbContext>(Options=>Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IUser, UserEF>();
+builder.Services.AddScoped<IGame, GameEF>();
+builder.Services.AddScoped<IResults, ResultEF>();
+builder.Services.AddScoped<ITransactions, TransactionsEF>();
+builder.Services.AddDbContext<CasinoDbContext>(Options => Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 var authSettings = new AuthSettings();
 builder.Configuration.GetSection("Authentication").Bind(authSettings);
 builder.Services.AddSingleton(authSettings);
@@ -75,6 +73,7 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.JwtKey))
     };
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

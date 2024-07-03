@@ -1,1 +1,1 @@
-export const ipaddr='localhost:7063';
+export const ipaddr='http://192.168.100.38:5000';

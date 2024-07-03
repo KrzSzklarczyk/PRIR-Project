@@ -30,7 +30,7 @@ export class TransactionService {
       return false;
     }
   
-    const url = `https://${addr.ipaddr}/Transaction/New/${credits}`;
+    const url = `${addr.ipaddr}/Transaction/New/${credits}`;
   
     try {
       // Perform the HTTP POST request to add credits

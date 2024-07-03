@@ -74,7 +74,7 @@ SendGame = async (pos1: number, pos2: number, pos3: number, amount: number): Pro
   }
 
   // Construct the URL for the POST request
-  const url = `https://${addr.ipaddr}/Game/PlayBandit/${pos1}/${pos2}/${pos3}/${amount}`;
+  const url = `${addr.ipaddr}/Game/PlayBandit/${pos1}/${pos2}/${pos3}/${amount}`;
 
   // Perform the POST request and await the result
   try {
@@ -130,7 +130,7 @@ SendGame = async (pos1: number, pos2: number, pos3: number, amount: number): Pro
     } else {
       this.http
         .post<UserResponseDTO>(
-          'https://localhost:7063/Account/getUserInfo',
+          'localhost:7063/Account/getUserInfo',
           this.cred,
           {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

@@ -84,7 +84,7 @@ export class MatchHistoryComponent implements OnInit {
     if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
       return of(this.banditData); // Return an observable of the default banditData
     } else {
-      const url = `https://${addr.ipaddr}/Game/Bandit/${id}`;
+      const url = `${addr.ipaddr}/Game/Bandit/${id}`;
       return this.http.get<BanditResponseDTO>(url, {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
       });
@@ -97,7 +97,7 @@ export class MatchHistoryComponent implements OnInit {
     if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
       return of(this.gameData); // Return an observable of the default gameData
     } else {
-      const url = `https://${addr.ipaddr}/Game/Game/${id}`;
+      const url = `${addr.ipaddr}/Game/Game/${id}`;
       return this.http.get<GameResponseDTO>(url, {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
       });
@@ -110,7 +110,7 @@ export class MatchHistoryComponent implements OnInit {
     if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
       return of(this.rouletteData); // Return an observable of the default rouletteData
     } else {
-      const url = `https://${addr.ipaddr}/Game/Roulette/${id}`;
+      const url = `${addr.ipaddr}/Game/Roulette/${id}`;
       return this.http.get<RouletteResponseDTO>(url, {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
       }).pipe(
@@ -129,7 +129,7 @@ export class MatchHistoryComponent implements OnInit {
       return;
     }
   
-    this.http.post<ResultResponseDTO[]>(`https://${addr.ipaddr}/Result/GetUserResult`, this.cred, {
+    this.http.post<ResultResponseDTO[]>(`${addr.ipaddr}/Result/GetUserResult`, this.cred, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     }).subscribe(results => {
       // Create an array of observables to handle fetching game and specific game type data
