@@ -9,7 +9,7 @@ import { UserResponseDTO } from '../../../models/user.models';
 import { UserType } from '../../../models/UserRole';
 import { AuthenticatedResponse } from '../../../models/authenticated-response';
 import { firstValueFrom } from 'rxjs';
-
+import * as addr from '../../../../addres'
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -64,11 +64,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.avatar = '';
       return;
     }
-
+const url=`https://${addr.ipaddr}:7063/Account/getUserInfo`
     try {
       const response: UserResponseDTO = await firstValueFrom(
-        this.http.post<UserResponseDTO>(
-          'https://localhost:7063/Account/getUserInfo',
+        this.http.post<UserResponseDTO>(url
+          ,
           this.cred,
           {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
