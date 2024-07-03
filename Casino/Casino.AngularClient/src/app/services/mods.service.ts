@@ -38,7 +38,7 @@ export class ModsService {
     try {
         // Make the HTTP POST request and await the response
         const response = await firstValueFrom(this.http.post<UserResponseDTO[]>(
-          `https://${addr.ipaddr}:7063/Account/getAllUsers`,
+          `https://${addr.ipaddr}/Account/getAllUsers`,
           this.cred,
           {
             headers: new HttpHeaders({ "Content-Type": "application/json" })

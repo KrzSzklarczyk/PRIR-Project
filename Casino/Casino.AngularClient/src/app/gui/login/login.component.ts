@@ -45,7 +45,7 @@ export class LoginComponent {
 
       // Convert Observable to Promise using firstValueFrom
       const response: AuthenticatedResponse = await firstValueFrom(
-        this.http.post<AuthenticatedResponse>(`https://${addr.ipaddr}:7063/Account/Login`, this.credentials, {
+        this.http.post<AuthenticatedResponse>(`https://${addr.ipaddr}/Account/Login`, this.credentials, {
           headers: { 'Content-Type': 'application/json' }
         })
       );

@@ -79,7 +79,7 @@ export class AdminPanelUserComponent implements OnInit {
       this.transactionHistory = [];
       return;
     }
-    const url = `https://${addr.ipaddr}:7063/Transaction/History/${id}`;
+    const url = `https://${addr.ipaddr}/Transaction/History/${id}`;
     this.http.post<TransactionsResponseDTO[]>(url, this.cred, {
       headers: new HttpHeaders({ "Content-Type": "application/json" })
     }).subscribe({
@@ -98,7 +98,7 @@ export class AdminPanelUserComponent implements OnInit {
     if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
       return;
     }
-    const url = `https://localhost:7063/Account/RemoveUser/${id}`;
+    const url = `https://${addr.ipaddr}/Account/RemoveUser/${id}`;
     this.http.post<boolean>(url, this.cred, {
       headers: new HttpHeaders({ "Content-Type": "application/json" })
     }).subscribe({
@@ -117,7 +117,7 @@ export class AdminPanelUserComponent implements OnInit {
     if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
       return;
     }
-    this.http.post<UserResponseDTO[]>("https://localhost:7063/Account/getAllUsers", this.cred, {
+    this.http.post<UserResponseDTO[]>(`https://${addr.ipaddr}/Account/getAllUsers`, this.cred, {
       headers: new HttpHeaders({ "Content-Type": "application/json" })
     }).subscribe({
       next: (response: UserResponseDTO[]) => {
@@ -137,7 +137,7 @@ export class AdminPanelUserComponent implements OnInit {
         position3: 0
       });
     }
-    const url = `https://localhost:7063/Game/Bandit/${id}`;
+    const url = `https://${addr.ipaddr}/Game/Bandit/${id}`;
     return this.http.get<BanditResponseDTO>(url, {
       headers: this.getAuthHeaders()
     }).pipe(
@@ -166,7 +166,7 @@ export class AdminPanelUserComponent implements OnInit {
         amount: 0
       });
     }
-    const url = `https://localhost:7063/Game/Game/${id}`;
+    const url = `https://${addr.ipaddr}/Game/Game/${id}`;
     return this.http.get<GameResponseDTO>(url, {
       headers: this.getAuthHeaders()
     }).pipe(
@@ -195,7 +195,7 @@ export class AdminPanelUserComponent implements OnInit {
         betnumber: 0
       });
     }
-    const url = `https://localhost:7063/Game/Roulette/${id}`;
+    const url = `https://${addr.ipaddr}/Game/Roulette/${id}`;
     return this.http.get<RouletteResponseDTO>(url, {
       headers: this.getAuthHeaders()
     }).pipe(
@@ -217,7 +217,7 @@ export class AdminPanelUserComponent implements OnInit {
     if (!this.cred.accessToken || !this.cred.refreshToken) {
       return;
     }
-    const url = `https://localhost:7063/Result/GetUserResult/${userId}`;
+    const url = `https://${addr.ipaddr}/Result/GetUserResult/${userId}`;
     this.http.post<ResultResponseDTO[]>(url, this.cred, {
       headers: this.getAuthHeaders()
     }).pipe(

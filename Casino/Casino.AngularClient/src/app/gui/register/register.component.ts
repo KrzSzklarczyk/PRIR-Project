@@ -61,7 +61,7 @@ export class RegisterComponent {
 
       // Convert Observable to Promise using firstValueFrom
       const response: AuthenticatedResponse = await firstValueFrom(
-        this.http.post<AuthenticatedResponse>(`https://${addr.ipaddr}:7063/Account/register`, this.credentials, {
+        this.http.post<AuthenticatedResponse>(`https://${addr.ipaddr}/Account/register`, this.credentials, {
           headers: new HttpHeaders({ "Content-Type": "application/json" })
         })
       );

@@ -28,7 +28,7 @@ async GetHistory(): Promise<void> {
     return;
   }
 
-  const url = `https://${addr.ipaddr}:7063/Transaction/History`;
+  const url = `https://${addr.ipaddr}/Transaction/History`;
 
   try {
     // Perform the HTTP POST request to get transaction history

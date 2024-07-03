@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.avatar = '';
       return;
     }
-const url=`https://${addr.ipaddr}:7063/Account/getUserInfo`
+const url=`https://${addr.ipaddr}/Account/getUserInfo`
     try {
       const response: UserResponseDTO = await firstValueFrom(
         this.http.post<UserResponseDTO>(url
