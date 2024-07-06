@@ -45,7 +45,7 @@ namespace Casino.BLL_EF
 
         public async Task<bool> PlayRoulette(UserTokenResponse token, RouletteRequestDTO roulette)
         {
-            int[] red = new int[] { 1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 36, 35, 34 };
+            int[] red = new int[] { 1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 36,  34 };
             int[] black = new int[] { 2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 29, 28, 31, 33, 35 };
             if (roulette.betAmount < 25) return false;
 
@@ -67,11 +67,11 @@ namespace Casino.BLL_EF
             if (user.Credits < roulette.betAmount) return false;
 
             int amo;
-            if (roulette.betNumber == roulette.roll && roulette.roll != 0)
+                if (roulette.betNumber == roulette.roll && roulette.roll != 0)
             {
                 amo = roulette.betAmount * 35;
             }
-            else if ((red.Contains(roulette.roll) || black.Contains(roulette.roll)) && roulette.roll == -1)
+            else if (((red.Contains(roulette.roll)&& roulette.red) || (roulette.black&& black.Contains(roulette.roll))) && roulette.betNumber <= -1)
             {
                 amo = roulette.betAmount;
             }

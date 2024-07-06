@@ -75,7 +75,7 @@ SendGame = async (pos1: number, pos2: number, pos3: number, amount: number): Pro
 
   // Construct the URL for the POST request
   const url = `${addr.ipaddr}/Game/PlayBandit/${pos1}/${pos2}/${pos3}/${amount}`;
-
+console.log(url)
   // Perform the POST request and await the result
   try {
     const response = await firstValueFrom(
@@ -122,25 +122,29 @@ SendGame = async (pos1: number, pos2: number, pos3: number, amount: number): Pro
     this.betAmount -= 100;
   }
 
-  setMaxBet(): void {
+  async setMaxBet(): Promise<void> {
     this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
     this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
-
-    if (this.cred.accessToken == '' || this.cred.refreshToken == '') {
+  
+    if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
+      // Handle the case when tokens are missing
+      return;
     } else {
-      this.http
-        .post<UserResponseDTO>(
-          'localhost:7063/Account/getUserInfo',
-          this.cred,
-          {
-            headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-          }
-        )
-        .subscribe({
-          next: (response: UserResponseDTO) => {
-            this.betAmount = response.credits;
-          },
-        });
+      try {
+        const response: UserResponseDTO = await firstValueFrom(
+          this.http.post<UserResponseDTO>(
+`${addr.ipaddr}/Account/getUserInfo`, // Make sure to include 'http://' or 'https://'
+            this.cred,
+            {
+              headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+            }
+          )
+        );
+        
+        this.betAmount = response.credits;
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
     }
   }
 }

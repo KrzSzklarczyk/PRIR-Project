@@ -22,6 +22,8 @@ export class RouletteComponent implements OnInit {
   blackNumbers: number[] = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
   blueNumbers: number[] = [0];
   isAuthorized: boolean = false;
+  orderNumbers: number[] = [0,26,3,35,12,28,7,29,18,22,9,31,14,20,1,33,16,24,5,10,23,8,30,11,36,13,27,6,34,17,25,2,21,4,19,15,32];
+  pastSpinCorrection: number = 0;
   constructor(private renderer: Renderer2, private el: ElementRef,private http:HttpClient) {}
 
   ngOnInit(): void {
@@ -37,9 +39,10 @@ export class RouletteComponent implements OnInit {
   spin(): void {
     if(this.betAmount >= 25 && (this.selectedButton == "red" || this.selectedButton == "blue" || this.selectedButton == "black")){
     this.renderer.setStyle(this.el.nativeElement.querySelector('.wheel img'), 'filter', 'blur(8px)');
-this.rolledNumber=this.getRandomInt(0, 37);
-    this.spininterval =this.rolledNumber  * (360 / 37) + this.getRandomInt(3, 4) * 360;
-    this.currentLength += this.spininterval;
+    this.rolledNumber=this.getRandomInt(0, 36);
+    this.spininterval = this.orderNumbers.indexOf(this.rolledNumber) * (360 / 37) + this.getRandomInt(3,4) * 360;
+    this.currentLength += this.spininterval - this.pastSpinCorrection;
+    this.pastSpinCorrection = this.orderNumbers.indexOf(this.rolledNumber) * (360 / 37);
 
     const numofsecs = this.spininterval;
 

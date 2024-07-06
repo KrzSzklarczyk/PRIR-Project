@@ -126,22 +126,17 @@ export class ProfileComponent {
       alert("Invalid Password!!! Password should have: small letters, UpperCase, digits, and special characters. Please try again.");
       return;
     }
-  
     // Get the new password value from the form
     const newPassword = this.changePasswordForm.get('newPassword')?.value;
-  
     // Retrieve the accessToken and refreshToken from localStorage
     this.cred.accessToken = localStorage.getItem('accessToken') ?? '';
     this.cred.refreshToken = localStorage.getItem('refreshToken') ?? '';
-  
     // Create the DTO object for the request
     const us: UserChangeDTO = { token: this.cred, cos: newPassword };
-  
     // Check if either token is missing
     if (this.cred.accessToken === '' || this.cred.refreshToken === '') {
       return;
     }
-  
     try {
       // Perform the PUT request and await the result
       await firstValueFrom(
